@@ -88,6 +88,30 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
+    /**
+     * Update User Profile
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateUserProfile(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:100',
+            'dob' => 'required|date|date_format:Y-m-d',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = auth()->user();
+        $user->email = $request->input('email');
+        $user->dob = $request->input('dob');
+        $user->save();
+
+        return response()->json($user);
+    }
+
 
     /**
      * Get the token array structure.
