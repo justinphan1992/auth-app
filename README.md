@@ -7,36 +7,84 @@ Simple authentication API with JWT
 - Docker
 ## Installation
 
-- Clone code from Git: git clone git@github.com:justinphan1992/auth-app.git
+- Clone code from Git: 
 
-- cd auth-app
+```bash
+git clone git@github.com:justinphan1992/auth-app.git
+```
 
-- Install composer: docker run --rm -v $(pwd):/app composer install 
+- Go to app folder
+```bash
+cd auth-app
+```
+
+- Install composer packages
+```bash
+docker run --rm -v $(pwd):/app composer install 
+```
 
 - Copy environment: .env.example => .env
+```bash
+cp .env.example .env
+```
 
-- Add DB_USERNAME=laravel DB_PASSWORD=laravel in .env
+- Add Database config into .env 
+```bash
+DB_USERNAME=laravel 
+DB_PASSWORD=laravel
+```
 
-- Run Docker compose: docker-compose up -d
+- Run Docker compose
+```bash
+docker-compose up -d
+```
 
-- Generate app key : docker-compose exec app php artisan key:generate
-
-- Cache config: docker-compose exec app php artisan config:cache
-
+- Generate app key
+```bash
+docker-compose exec app php artisan key:generate
+```
+- Cache app config
+```bash
+docker-compose exec app php artisan config:cache
+```
 ## Init Database
 
-- Login to db service: docker-compose exec db bash
+- Login to db service
+```bash
+docker-compose exec db bash
+```
 
-- Login to MYSQL:  mysql -u root -p
+- Login to MYSQL and enter root password in DB service
+```bash
+mysql -u root -p
+```
 
-- Enter Root Password in docker-compose db service
+- Grant all privileges of user to database
+```bash
+GRANT ALL ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'laravel';
+```
 
-- Grant all privileges of user to database: GRANT ALL ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'laravel';
+- Clear cache permission
+```bash
+FLUSH PRIVILEGES;
+```
 
-- Clear cache permission: FLUSH PRIVILEGES;
+- Exit MYSQL
+```
+exit
+```
 
-- Exit MYSQL: EXIT;
+- Exit docker service
+```
+exit
+```
 
-- Exit db service: exit
+- Run laravel migration
+```bash
+docker-compose exec app php artisan migrate
+```
 
-- Run laravel migration: docker-compose exec app php artisan migrate
+- Seeding database
+```bash
+docker-compose exec app php artisan db:seed
+```
